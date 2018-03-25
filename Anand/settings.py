@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+from .environ import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +26,7 @@ SECRET_KEY = '@gzhb$(-0rbjbo18=xz8*u_n-8fs%)v6a+iz!%odib!(d4+!!='
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -75,20 +76,33 @@ WSGI_APPLICATION = 'Anand.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'anand',
+#         'USER': 'root',
+#         'PASSWORD': 'lintel@365',
+#         'STORAGE_ENGINE': 'MyISAM / INNODB / ETC',
+#         'OPTIONS': {
+#             'sql_mode': 'traditional',
+#         }
+#     }
+# }
+import dj_database_url
+db_from_env = dj_database_url.config()
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'anand',
-        'USER': 'root',
-        'PASSWORD': 'lintel@365',
-        'STORAGE_ENGINE': 'MyISAM / INNODB / ETC',
-        'OPTIONS': {
-            'sql_mode': 'traditional',
-        }
+        'NAME': DB_NAME,
+        'USER': MYSQL_USER,
+        'PASSWORD':MYSQL_PASSWORD,
+        'PORT':MYSQL_PORT,
+        'HOST':MYSQL_HOST,
     }
 }
 
-
+DATABASES['default'].update(db_from_env)
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
@@ -125,4 +139,11 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'static'),
+)
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'

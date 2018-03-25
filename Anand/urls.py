@@ -19,7 +19,7 @@ from django.utils.translation import ugettext_lazy as _
 
 
 urlpatterns = [
-	url(r'^jet/', include('jet.urls', 'jet')),
+	# url(r'^jet/', include('jet.urls', 'jet')),
     url(r'^admin/', admin.site.urls),
 ]
 
